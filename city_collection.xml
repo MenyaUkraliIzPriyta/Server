@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cities>
+    <city>
+        <name>msk</name>
+        <id>1758102</id>
+        <telephoneCode>876</telephoneCode>
+        <standardOfLiving>HIGH</standardOfLiving>
+        <carcode>777</carcode>
+        <population>15000000</population>
+        <area>777.0</area>
+        <metersAboveSeaLevel>4567.0</metersAboveSeaLevel>
+        <age>78</age>
+        <creationDate>Fri Mar 22 20:06:12 MSK 2024</creationDate>
+    </city>
+    <city>
+        <name>ggg</name>
+        <id>943553</id>
+        <telephoneCode>777</telephoneCode>
+        <standardOfLiving>HIGH</standardOfLiving>
+        <carcode>676</carcode>
+        <population>666666</population>
+        <area>666.0</area>
+        <metersAboveSeaLevel>666.0</metersAboveSeaLevel>
+        <age>66</age>
+        <creationDate>Fri Apr 19 10:15:51 MSK 2024</creationDate>
+    </city>
+    <city>
+        <name>hui</name>
+        <id>7508225</id>
+        <telephoneCode>255</telephoneCode>
+        <standardOfLiving>HIGH</standardOfLiving>
+        <carcode>777</carcode>
+        <population>435242</population>
+        <area>2352.0</area>
+        <metersAboveSeaLevel>2323.0</metersAboveSeaLevel>
+        <age>2352</age>
+        <creationDate>Fri May 17 17:53:49 MSK 2024</creationDate>
+    </city>
+</cities>

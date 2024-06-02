@@ -1,9 +1,9 @@
 package org.example.CitiesPackage;
 
-import Examination.IsDouble;
-import Examination.IsFloat;
-import Examination.IsInt;
-import Examination.IsLong;
+import org.example.Examination.IsDouble;
+import org.example.Examination.IsFloat;
+import org.example.Examination.IsInt;
+import org.example.Examination.IsLong;
 import org.w3c.dom.*;
 
 import java.util.*;
