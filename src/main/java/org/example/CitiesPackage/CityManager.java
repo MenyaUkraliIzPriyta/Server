@@ -245,6 +245,7 @@ public class CityManager {
                     city.setCarCode(carCode);
                     city.setStandardOfLiving(standardOfLiving);
                     city.setGovernor(governor);
+                    city.setClinet_id(clientId);
 
                     cityCollection.add(city);
                 }
@@ -305,9 +306,14 @@ public class CityManager {
 //        }
 //    }
 public void saveCollection() {
+    Connection conn = null;
+    Statement statement = null;
     try {
         Class.forName("org.postgresql.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/CityApp", "postgres", "online");
+        conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/CityApp", "postgres", "online");
+        String sqldel = "DELETE FROM cities";
+        statement = conn.createStatement();
+        statement.executeUpdate(sqldel);
 
         String sql = "INSERT INTO cities (name, id, telephone_code, standard_of_living, car_code, population, area, meters_above_sea_level, governor_age, creation_date, client_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -323,7 +329,7 @@ public void saveCollection() {
             pstmt.setDouble(8, city.getMetersAboveSeaLevel());
             pstmt.setInt(9, city.getGovernor().getAge());
             pstmt.setString(10, city.getCreationDate());
-            pstmt.setInt(11, new Registration().getId());
+            pstmt.setInt(11, city.getClinet_id());
             pstmt.addBatch();
         }
 

@@ -1,7 +1,5 @@
 package org.example.Server;
 
-
-
 import org.example.Basic_comm.CheckRegistration;
 import org.example.Basic_comm.Execute;
 import org.example.Basic_comm.Registration;
@@ -10,6 +8,7 @@ import org.example.ProcessingRequests.Response;
 import org.example.ProcessingRequests.Serializer;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -23,10 +22,16 @@ import static org.example.Server.SendResponse.sendResponse;
 public class HandleRead {
     private static final ExecutorService readerPool = Executors.newFixedThreadPool(10);
     private static final ForkJoinPool requestPool = new ForkJoinPool(); // Пул потоков для обработки запросов
+
     protected static void handleRead(SelectionKey key) throws IOException {
-//        readerPool.submit(() -> {
+        readerPool.submit(() -> {
             SocketChannel clientChannel = (SocketChannel) key.channel();
-            ByteBuffer buffer = ByteBuffer.allocate(4096);
+            ByteBuffer buffer = null;
+            try {
+                buffer = ByteBuffer.allocate(clientChannel.socket().getReceiveBufferSize());
+            } catch (SocketException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 int bytesRead = clientChannel.read(buffer);
                 if (bytesRead == -1) {
@@ -34,43 +39,51 @@ public class HandleRead {
                     System.out.println("Client disconnected");
                     return;
                 }
-                buffer.flip();
-                byte[] data = new byte[buffer.limit()];
-                buffer.get(data);
-                // Отправляем задачу на обработку в ForkJoinPool
-//                requestPool.submit(() -> {
-                    try {
-                        // Пытаемся десериализовать объект Response из полученных данных
-                        Response response = Serializer.deserializeResponse(data);
-                        if (CheckRegistration.getReg()) {
-                            new CityManager().loadCollectionFromDatabase();
-                            // Обрабатываем объект Response
-                            if (response.getCity() != null & response.getMessage().equals("add")) {
-                                CityManager.getCollection().add(response.getCity());
-                                sendResponse(clientChannel, "Город " + response.getCity().getName() + " успешно обработан.");
-                            }
-                            if (response.getMessage().equals("insert_at")) {
-                                CityManager.getCollection().add(response.getnum(), response.getCity());
-                                sendResponse(clientChannel, "Элемент добавлен");
+
+                // Ensure the buffer is fully read
+                while (bytesRead > 0) {
+                    buffer.flip();
+                    byte[] data = new byte[buffer.remaining()];
+                    buffer.get(data);
+
+                    // Отправляем задачу на обработку в ForkJoinPool
+                    requestPool.submit(() -> {
+                        try {
+                            // Пытаемся десериализовать объект Response из полученных данных
+                            Response response = Serializer.deserializeResponse(data);
+                            if (CheckRegistration.getReg()) {
+                                // Обрабатываем объект Response
+                                if (response.getCity() != null && response.getMessage().equals("add")) {
+                                    response.getCity().setClinet_id(Registration.getId());
+                                    CityManager.getCollection().add(response.getCity());
+                                    sendResponse(clientChannel, "Город " + response.getCity().getName() + " успешно  обработан.");
+                                    CheckRegistration.changeRegfalse();
+                                } else if (response.getMessage().equals("insert_at")) {
+                                    CityManager.getCollection().add(response.getnum(), response.getCity());
+                                    sendResponse(clientChannel, "Элемент добавлен");
+                                    CheckRegistration.changeRegfalse();
+                                } else {
+                                    // Если объект City не был получен, обрабатываем текстовое сообщение
+                                    System.out.println("Received: " + response.getMessage());
+                                    sendResponse(clientChannel, new Execute().executeCommand(response.getMessage()));
+                                    CheckRegistration.changeRegfalse();
+                                }
+                            } else {
+                                sendResponse(clientChannel, Registration.get(response.getUsername(), response.getPassword(), response.getMessage()));
+                                Registration.setID(response.getUsername());
 
                             }
-                            else {
-                                // Если объект City не был получен, обрабатываем текстовое сообщение
-                                System.out.println("Received: " + response.getMessage());
-                                sendResponse(clientChannel, new Execute().executeCommand(response.getMessage()));
-                            }
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            sendResponse(clientChannel, Registration.get(response.getUsername(), response.getPassword(), response.getMessage()));
-                            Registration.setID(response.getUsername());
-                        }
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-//                });
+                    });
+
+                    buffer.clear();
+                    bytesRead = clientChannel.read(buffer);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-//        });
+        });
     }
 }
