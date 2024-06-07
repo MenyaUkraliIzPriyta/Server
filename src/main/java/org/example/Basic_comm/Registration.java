@@ -29,8 +29,8 @@ public class Registration {
 
                 if (rs.next()) {
                     String storedPasswordHash = rs.getString("password_hash");
-                    if (storedPasswordHash.equals(passwordHash)) {
-                        CheckRegistration.changeReg();
+                    if (storedPasswordHash.equals(new PasswordHasher().hashPassword(passwordHash))) {
+                        CheckRegistration.changeRegtrue();
                         setID(username);
                         return "Вход в аккаунт успешно выполнен.";
                     } else {
@@ -55,10 +55,10 @@ public class Registration {
                     String insertSQL = "INSERT INTO users_client (username, password_hash) VALUES (?, ?)";
                     pstmt = conn.prepareStatement(insertSQL);
                     pstmt.setString(1, username);
-                    pstmt.setString(2, passwordHash);
+                    pstmt.setString(2, new PasswordHasher().hashPassword(passwordHash));
                     int rows = pstmt.executeUpdate();
                     if (rows > 0) {
-                        CheckRegistration.changeReg();
+                        CheckRegistration.changeRegtrue();
                         setID(username);
                         return "Регистрация прошла успешно!";
                     } else {

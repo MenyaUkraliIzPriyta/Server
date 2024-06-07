@@ -14,6 +14,7 @@ public class City implements Serializable {
     private long carCode;
     private StandardOfLiving standardOfLiving;
     private Human governor;
+    private int clinet_id;
 
 
 
@@ -37,8 +38,13 @@ public class City implements Serializable {
     }
 
 
+   public void setClinet_id(int clinet_id) {
+        this.clinet_id = clinet_id;
+   }
 
-
+   public int getClinet_id() {
+        return clinet_id;
+   }
 
     public String getCreationDate() {
 

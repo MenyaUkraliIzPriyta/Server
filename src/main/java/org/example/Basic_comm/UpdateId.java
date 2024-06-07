@@ -11,10 +11,12 @@ public class UpdateId extends Command{
         int flag = 0;
         for (City cities : CityManager.getCollection()) {
             if (cities.getName().equals(element)) {
-                flag = 1;
-                Random random_ = new Random();
-                int id_ = random_.nextInt(10000000);
-                cities.setId(id_);
+                if (cities.getClinet_id()== Registration.getId()) {
+                    flag = 1;
+                    Random random_ = new Random();
+                    int id_ = random_.nextInt(10000000);
+                    cities.setId(id_);
+                }
             }
         }
         if (flag == 1) {

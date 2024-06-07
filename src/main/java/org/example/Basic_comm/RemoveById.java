@@ -11,9 +11,11 @@ public class RemoveById extends Command { // RemoveById
             int flag = 0;
             for (int i = 0; i != CityManager.getCollection().size(); i++) {
                 if (CityManager.getCollection().get(i).getId() == Integer.parseInt(element)) {
-                    flag = 1;
-                    City delete = CityManager.getCollection().get(i);
-                    CityManager.getCollection().remove(delete);
+                    if (CityManager.getCollection().get(i).getClinet_id()== Registration.getId()) {
+                        flag = 1;
+                        City delete = CityManager.getCollection().get(i);
+                        CityManager.getCollection().remove(delete);
+                    }
                 }
             }
             if (flag == 1) {

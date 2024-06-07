@@ -13,9 +13,11 @@ public class RemoveAt extends Command {
             } else {
                 for (int i = 0; i != CityManager.getCollection().size(); i++) {
                     if (i == Integer.parseInt(element)) {
-                        City delete = CityManager.getCollection().get(i);
-                        CityManager.getCollection().remove(delete);
-                        return "Элемент успешно удален";
+                        if (CityManager.getCollection().get(i).getClinet_id() == Registration.getId()) {
+                            City delete = CityManager.getCollection().get(i);
+                            CityManager.getCollection().remove(delete);
+                            return "Элемент успешно удален";
+                        }
                     }
                 }
             }

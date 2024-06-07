@@ -9,47 +9,23 @@ import java.nio.ByteBuffer;
 
 public final class Serializer {
 
-    public Serializer() {
-        //never used
+    private Serializer() {
+        // Prevent instantiation
     }
 
-//    public static ByteBuffer serializeCommand(CommandAbstract command) throws IOException {
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(bytes);
-//        oos.writeObject(command);
-//        oos.flush();
-//        ByteBuffer bufferToSend = ByteBuffer.wrap(bytes.toByteArray());
-//        oos.close();
-//        bytes.close();
-//        return bufferToSend;
-//    }
-
     public static Response deserializeResponse(byte[] bytes) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        Response response = (Response) objectInputStream.readObject();
-        byteArrayInputStream.close();
-        objectInputStream.close();
-        return response;
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            return (Response) objectInputStream.readObject();
+        }
     }
 
     public static ByteBuffer serializeResponse(Response response) throws IOException {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bytes);
-        oos.writeObject(response);
-        oos.flush();
-        ByteBuffer bufferToSend = ByteBuffer.wrap(bytes.toByteArray());
-        oos.close();
-        bytes.close();
-        return bufferToSend;
+        try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bytes)) {
+            oos.writeObject(response);
+            oos.flush();
+            return ByteBuffer.wrap(bytes.toByteArray());
+        }
     }
-
-//    public static CommandAbstract deserializeCommand(byte[] bytes) throws IOException, ClassNotFoundException {
-//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-//        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-//        CommandAbstract command = (CommandAbstract) objectInputStream.readObject();
-//        byteArrayInputStream.close();
-//        objectInputStream.close();
-//        return command;
-//    }
 }
