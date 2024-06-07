@@ -42,8 +42,8 @@ public class HandleRead {
                     try {
                         // Пытаемся десериализовать объект Response из полученных данных
                         Response response = Serializer.deserializeResponse(data);
-                        if (CheckRegistration.getReg() == true) {
-
+                        if (CheckRegistration.getReg()) {
+                            new CityManager().loadCollectionFromDatabase();
                             // Обрабатываем объект Response
                             if (response.getCity() != null & response.getMessage().equals("add")) {
                                 CityManager.getCollection().add(response.getCity());
@@ -54,16 +54,15 @@ public class HandleRead {
                                 sendResponse(clientChannel, "Элемент добавлен");
 
                             }
-                            if (!response.getUsername().equals("")) {
-
-                            } else {
+                            else {
                                 // Если объект City не был получен, обрабатываем текстовое сообщение
                                 System.out.println("Received: " + response.getMessage());
                                 sendResponse(clientChannel, new Execute().executeCommand(response.getMessage()));
                             }
                         }
                         else {
-                            sendResponse(clientChannel, new Registration().get(response.getUsername(), response.getPassword(), response.getMessage()));
+                            sendResponse(clientChannel, Registration.get(response.getUsername(), response.getPassword(), response.getMessage()));
+                            Registration.setID(response.getUsername());
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();

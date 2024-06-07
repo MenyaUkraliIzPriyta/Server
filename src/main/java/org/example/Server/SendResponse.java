@@ -7,7 +7,7 @@ import java.nio.channels.SocketChannel;
 public class SendResponse {
     protected static void sendResponse(SocketChannel clientChannel, String response) throws IOException {
         // Отправляем ответ клиенту
-        new Thread(() -> {
+//        new Thread(() -> {
             ByteBuffer buffer = ByteBuffer.wrap(response.getBytes());
             try {
                 clientChannel.write(buffer);
@@ -15,6 +15,6 @@ public class SendResponse {
                 throw new RuntimeException(e);
             }
             buffer.clear();
-        }).start();
+//        }).start();
     }
 }

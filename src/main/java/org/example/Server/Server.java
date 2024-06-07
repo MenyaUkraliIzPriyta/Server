@@ -22,7 +22,6 @@ public class Server {
         try {
             // Создаем селектор
             Selector selector = Selector.open();
-            new CityManager().loadCollectionFromFile();
             // Создаем серверный канал и регистрируем его в селекторе на прослушивание
             ServerSocketChannel serverChannel = ServerSocketChannel.open();
             serverChannel.bind(new InetSocketAddress(12346));
