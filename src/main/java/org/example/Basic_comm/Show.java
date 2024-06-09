@@ -6,11 +6,12 @@ import org.example.CitiesPackage.City;
 import org.example.CitiesPackage.CityManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Show extends Command {
     protected String get(String element) {
         // Получаем коллекцию городов
-        ArrayList<City> cities = CityManager.getCollection();
+        List<City> cities = CityManager.getCollection();
 
         // Формируем строку с информацией о коллекции
         StringBuilder result = new StringBuilder();

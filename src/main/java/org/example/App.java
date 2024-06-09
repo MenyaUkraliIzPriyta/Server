@@ -1,18 +1,18 @@
-package org.example;
-
-import org.example.Basic_comm.CheckRegistration;
-import org.example.Basic_comm.Registration;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-public class App {
-    public static void main(String[] args) {
-//        String url = "jdbc:postgresql://localhost:5432/CityApp";
-//        String user = "postgres";
-//        String pass = "online";
+//package org.example;
+//
+//import org.example.Basic_comm.CheckRegistration;
+//import org.example.Basic_comm.Registration;
+//
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.PreparedStatement;
+//import java.sql.SQLException;
+//
+//public class App {
+//    public static void main(String[] args) {
+//        String url = "jdbc:postgresql://localhost:5432/studs";
+//        String user = "s408936";
+//        String pass = "ahY8Ti0pPYkLJ84R";
 //
 //        try {
 //            Class.forName("org.postgresql.Driver");
@@ -33,7 +33,6 @@ public class App {
 //        } catch (ClassNotFoundException | SQLException e) {
 //            e.printStackTrace();
 //        }
-        CheckRegistration.changeRegtrue();
-        System.out.println(CheckRegistration.getReg());
-    }
-}
+//
+//    }
+//}

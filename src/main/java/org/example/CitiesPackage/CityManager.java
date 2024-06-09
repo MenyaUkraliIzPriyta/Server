@@ -18,7 +18,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
 public class CityManager {
-    private static ArrayList<City> cityCollection = new ArrayList<>();
+//    private static ArrayList<City> cityCollection = new ArrayList<>();
+    private static List<City> cityCollection = Collections.synchronizedList(new ArrayList<>());
 
 
 //    public void loadCollectionFromFile()  {
@@ -353,7 +354,7 @@ public void saveCollection() {
         parentElement.appendChild(element);
     }
 
-    public  static ArrayList<City> getCollection(){
+    public  static List<City> getCollection(){
         return cityCollection;
     }
 }
