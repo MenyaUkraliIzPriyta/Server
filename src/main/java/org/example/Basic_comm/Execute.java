@@ -12,7 +12,7 @@ public class Execute {
         commandMap.put("info", (new Info()));
         commandMap.put("show", (new Show()));
         commandMap.put("update_id", new UpdateId());
-        commandMap.put("remove_by_id", new RemoveById());
+//        commandMap.put("remove_by_id", new RemoveById());
         commandMap.put("clear", new Clear());
         commandMap.put("exit", new Exit());
         commandMap.put("save", new Save());
@@ -26,9 +26,6 @@ public class Execute {
         String command = parts[0];
         String element = parts.length > 1 ? parts[1] : "";
         Map<String, Command> map = new HashMap<>();
-
-//        map.put("insert_at", new InsertAt());
-//        map.put("execute_script", new Script());
 
         if (!commandMap.containsKey(command)) {
             return "Неизвестная команда. Введите 'help' для справки.";

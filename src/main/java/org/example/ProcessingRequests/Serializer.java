@@ -13,14 +13,14 @@ public final class Serializer {
         // Prevent instantiation
     }
 
-    public static Response deserializeResponse(byte[] bytes) throws IOException, ClassNotFoundException {
+    public static InputData deserializeInputData(byte[] bytes) throws IOException, ClassNotFoundException {
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
              ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-            return (Response) objectInputStream.readObject();
+            return (InputData) objectInputStream.readObject();
         }
     }
 
-    public static ByteBuffer serializeResponse(Response response) throws IOException {
+    public static ByteBuffer serializeInputData(InputData response) throws IOException {
         try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
              ObjectOutputStream oos = new ObjectOutputStream(bytes)) {
             oos.writeObject(response);

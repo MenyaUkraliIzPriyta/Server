@@ -6,23 +6,26 @@ import org.example.CitiesPackage.City;
 
 import java.io.Serializable;
 
-public class Response implements Serializable {
+public class InputData implements Serializable {
 
-    private String message = "";
+    private String message;
     private City c = null;
     private int num;
     private String username = "";
     private String password;
+    private boolean checkregistation;
 
-    public Response(String message) {
+    public InputData(String message, boolean checkregistation) {
         this.message = message;
+        this.checkregistation = checkregistation;
     }
-    public Response(City c, int num, String message) {
+    public InputData(City c, int num, String message, boolean checkregistation) {
         this.c = c;
         this.num = num;
         this.message = message;
+        this.checkregistation = checkregistation;
     }
-    public Response(String username, String password, String message) {
+    public InputData(String username, String password, String message) {
         this.username = username;
         this.password = password;
         this.message = message;
@@ -46,5 +49,8 @@ public class Response implements Serializable {
 
     public int getnum() {
         return num;
+    }
+    public boolean getregistration() {
+        return checkregistation;
     }
 }

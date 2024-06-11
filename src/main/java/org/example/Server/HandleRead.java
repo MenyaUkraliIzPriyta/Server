@@ -4,7 +4,8 @@ import org.example.Basic_comm.CheckRegistration;
 import org.example.Basic_comm.Execute;
 import org.example.Basic_comm.Registration;
 import org.example.CitiesPackage.CityManager;
-import org.example.ProcessingRequests.Response;
+import org.example.Examination.IsInt;
+import org.example.ProcessingRequests.InputData;
 import org.example.ProcessingRequests.Serializer;
 
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.sql.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -50,8 +50,8 @@ public class HandleRead {
                     requestPool.submit(() -> {
                         try {
                             // Пытаемся десериализовать объект Response из полученных данных
-                            Response response = Serializer.deserializeResponse(data);
-                            if (CheckRegistration.getReg()) {
+                            InputData response = Serializer.deserializeInputData(data);
+                            if (response.getregistration()) {
                                 // Обрабатываем объект Response
                                 if (response.getCity() != null && response.getMessage().equals("add")) {
                                     response.getCity().setClinet_id(Registration.getId());
@@ -59,9 +59,19 @@ public class HandleRead {
                                     sendResponse(clientChannel, "Город " + response.getCity().getName() + " успешно  обработан.");
                                     CheckRegistration.changeRegfalse();
                                 } else if (response.getMessage().equals("insert_at")) {
-                                    CityManager.getCollection().add(response.getnum(), response.getCity());
-                                    sendResponse(clientChannel, "Элемент добавлен");
-                                    CheckRegistration.changeRegfalse();
+                                    if (response.getnum() > -1) {
+                                        if (response.getnum() <= CityManager.getCollection().size()) {
+                                            CityManager.getCollection().add(response.getnum(), response.getCity());
+                                            sendResponse(clientChannel, "Элемент добавлен");
+                                            CheckRegistration.changeRegfalse();
+                                        } else {
+                                            sendResponse(clientChannel, "Превышен размер коллекции");
+                                            CheckRegistration.changeRegfalse();
+                                        }
+                                    } else {
+                                        sendResponse(clientChannel, "Введены некоректные данные");
+                                        CheckRegistration.changeRegfalse();
+                                    }
                                 } else {
                                     // Если объект City не был получен, обрабатываем текстовое сообщение
                                     System.out.println("Received: " + response.getMessage());
