@@ -56,29 +56,28 @@ public class HandleRead {
                                 if (response.getCity() != null && response.getMessage().equals("add")) {
                                     response.getCity().setClinet_id(Registration.getId());
                                     CityManager.getCollection().add(response.getCity());
+                                    System.out.println("Received: " + response.getMessage());
                                     sendResponse(clientChannel, "Город " + response.getCity().getName() + " успешно  обработан.");
-                                    CheckRegistration.changeRegfalse();
                                 } else if (response.getMessage().equals("insert_at")) {
                                     if (response.getnum() > -1) {
                                         if (response.getnum() <= CityManager.getCollection().size()) {
                                             CityManager.getCollection().add(response.getnum(), response.getCity());
+                                            System.out.println("Received: " + response.getMessage());
                                             sendResponse(clientChannel, "Элемент добавлен");
-                                            CheckRegistration.changeRegfalse();
                                         } else {
+                                            System.out.println("Received: " + response.getMessage());
                                             sendResponse(clientChannel, "Превышен размер коллекции");
-                                            CheckRegistration.changeRegfalse();
                                         }
                                     } else {
                                         sendResponse(clientChannel, "Введены некоректные данные");
-                                        CheckRegistration.changeRegfalse();
                                     }
                                 } else {
                                     // Если объект City не был получен, обрабатываем текстовое сообщение
                                     System.out.println("Received: " + response.getMessage());
                                     sendResponse(clientChannel, new Execute().executeCommand(response.getMessage()));
-                                    CheckRegistration.changeRegfalse();
                                 }
                             } else {
+                                System.out.println("Received: " + response.getMessage());
                                 sendResponse(clientChannel, Registration.get(response.getUsername(), response.getPassword(), response.getMessage()));
                                 Registration.setID(response.getUsername());
 

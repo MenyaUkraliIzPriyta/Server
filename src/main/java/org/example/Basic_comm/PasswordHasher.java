@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class PasswordHasher {
 
-    public String hashPassword(String password) {
+    public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
 //            byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
